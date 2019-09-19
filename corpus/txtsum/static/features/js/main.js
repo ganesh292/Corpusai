@@ -1,6 +1,6 @@
 var csrftoken = getCookie("csrftoken");
 
-
+var fileup = 0;
 
 function getCookie(name) {
   var cookieValue = null;
@@ -31,7 +31,8 @@ function readURL(input) {
         $('.image-title').html(input.files[0].name);
       };
   
-      reader.readAsDataURL(input.files[0]);
+      // fileup = reader.readAsDataURL(input.files[0]);
+      fileup = input.files[0]
       
   
     } else {
@@ -56,13 +57,19 @@ function readURL(input) {
 // ##########################Start of Custom Code#####################
   function send(){
     var options = document.getElementById("option").value;
-    console.log("HI")
+    var loader = document.getElementById('load');
+    var go = document.getElementById("go");
+    go.style.display = "none";
+    
+
     if (options == "4"){
+      var t = document.getElementById("text1");
+      t.style.display = "none";
       var fd = new FormData();      
 
       fd.append('csrfmiddlewaretoken', csrftoken);
       fd.append('text', document.getElementById("textarea").value);
-      console.log('Sending Text to Django')
+
       var tet1 = $.ajax({
           url: '/home/features/sumtext',
           type: 'POST',
@@ -70,7 +77,67 @@ function readURL(input) {
           async: false,
           contentType: false,
           processData: false,
+          beforeSend: function(){
+            // Show image container
+            $("#load").show();
+            console.log(loader.style.display);
+           },
           success: function (data) {
+            loader.style.display = "none";
+              sessionStorage.setItem('summary', data)
+              location.replace('/home/features/chatbot')
+          },
+          error: function (error) {
+              console.log(error);
+          }
+      }).responseText;
+    }
+    else if (options == "3"){
+      var ur = document.getElementById("url1");
+      ur.style.display = "none";
+      var fd = new FormData();      
+
+      fd.append('csrfmiddlewaretoken', csrftoken);
+      fd.append('url', document.getElementById("urltext").value);
+      console.log('Sending Text to Django')
+      document.getElementById('load').style.display = "block";
+      var tet1 = $.ajax({
+          url: '/home/features/urltext',
+          type: 'POST',
+          data: fd,
+          async: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            document.getElementById('load').style.display = "none";
+              sessionStorage.setItem('summary', data)
+              location.replace('/home/features/chatbot')
+          },
+          error: function (error) {
+              console.log(error);
+          }
+      }).responseText;
+    }
+
+    else if (options == "1"){
+      var f = document.getElementById("File");
+      f.style.display = "none";
+      var fd = new FormData();      
+
+      fd.append('csrfmiddlewaretoken', csrftoken);
+      fd.append('file', JSON.stringify(fileup));
+      console.log('Sending File to Django')
+      console.log(fd);
+      document.getElementById('load').style.display = "block";
+      var tet1 = $.ajax({
+          url: '/home/features/doc2text',
+          type: 'POST',
+          data: fd,
+          async: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            document.getElementById('load').style.display = "none";
               sessionStorage.setItem('summary', data)
               location.replace('/home/features/chatbot')
           },
@@ -88,7 +155,7 @@ function readURL(input) {
 
   function file(){
       var x = document.getElementById("File");
-      var y = document.getElementById("img1");
+      // var y = document.getElementById("img1");
       var z = document.getElementById("url1");
       var t = document.getElementById("text1");
       var go = document.getElementById("go");
@@ -96,7 +163,7 @@ function readURL(input) {
       go.style.display = "block"
       if (x.style.display === "none") {
         x.style.display = "block";
-        y.style.display = "none";
+        // y.style.display = "none";
         z.style.display = "none";
         t.style.display = "none";
       } else {
@@ -107,7 +174,7 @@ function readURL(input) {
 
   function url1(){
     var x = document.getElementById("File");
-    var y = document.getElementById("img1");
+    // var y = document.getElementById("img1");
     var z = document.getElementById("url1");
     var t = document.getElementById("text1");
     var go = document.getElementById("go");
@@ -115,7 +182,7 @@ function readURL(input) {
     go.style.display = "block"
     if (z.style.display === "none") {
       x.style.display = "none";
-      y.style.display = "none";
+      // y.style.display = "none";
       z.style.display = "block";
       t.style.display = "none";
     } else {
@@ -124,29 +191,29 @@ function readURL(input) {
   
 }
 
-function img1(){
-  var x = document.getElementById("File");
-  var y = document.getElementById("img1");
-  var z = document.getElementById("url1");
-  var t = document.getElementById("text1");
-  var go = document.getElementById("go");
-  document.getElementById("option").value = "2";
-  go.style.display = "block"
-  if (y.style.display === "none") {
-    x.style.display = "none";
-    y.style.display = "block";
-    z.style.display = "none";
-    t.style.display = "none";
+// function img1(){
+//   var x = document.getElementById("File");
+//   // var y = document.getElementById("img1");
+//   var z = document.getElementById("url1");
+//   var t = document.getElementById("text1");
+//   var go = document.getElementById("go");
+//   document.getElementById("option").value = "2";
+//   go.style.display = "block"
+//   if (y.style.display === "none") {
+//     x.style.display = "none";
+//     y.style.display = "block";
+//     z.style.display = "none";
+//     t.style.display = "none";
 
-  } else {
-    y.style.display = "none";
-  }
+//   } else {
+//     y.style.display = "none";
+//   }
 
-}
+// }
 
 function text1(){
   var x = document.getElementById("File");
-  var y = document.getElementById("img1");
+  // var y = document.getElementById("img1");
   var z = document.getElementById("url1");
   var t = document.getElementById("text1");
   var go = document.getElementById("go");
@@ -154,7 +221,7 @@ function text1(){
   go.style.display = "block"
   if (t.style.display === "none") {
     x.style.display = "none";
-    y.style.display = "none";
+    // y.style.display = "none";
     z.style.display = "none";
     t.style.display = "block";
   } else {

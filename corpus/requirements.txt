@@ -192,7 +192,7 @@ pycrypto==2.6.1
 pycryptodome==3.9.0
 pycurl==7.43.0.3
 pyflakes==2.1.1
-Pygments==2.4.2
+Pygments==2.7.4
 pylint==2.3.1
 pymorphy2==0.8
 pymorphy2-dicts==2.4.393442.3710985

@@ -52,7 +52,7 @@ dask==2.1.0
 DAWG-Python==0.7.2
 decorator==4.4.0
 defusedxml==0.6.0
-distributed==2.1.0
+distributed==2021.10.0
 Django==2.2.5
 docker==3.7.3
 docker-compose==1.23.2
